@@ -1,11 +1,18 @@
-
+from asylum import config
 from asylum.init import Rc
 
 
 class Pf(object):
 
+    FILE = '/etc/pf.conf'
+
     @classmethod
     def converge(cls):
+        text = ConfigTemplate.render(
+            jail_iface=config.network['interface'],
+            public_ip=config.network['public_address'])
+        with open(cls.FILE, 'w') as fd:
+            fd.write(text)
         Rc.reload('pf')
 
 

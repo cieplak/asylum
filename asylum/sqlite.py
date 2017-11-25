@@ -66,20 +66,21 @@ class Container(Model):
 class Jail(Model):
     __tablename__ = 'jail'
     __table_args__ = {'sqlite_autoincrement': True}
-    id      = Column(Integer, primary_key=True)
-    name    = Column(Unicode)
-    path    = Column(Unicode)
-    config  = Column(Unicode)
-    iface   = Column(Unicode)
+    id = Column(Integer, primary_key=True)
+    name = Column(Unicode)
+    path = Column(Unicode)
+    base = Column(Unicode)
+    interface = Column(Unicode)
     address = Column(Unicode)
 
 
 class HttpService(Model):
     __tablename__ = 'http_service'
     id = Column(Unicode, primary_key=True, default=uuid4)
-    name = Column(Unicode)
-    host = Column(Unicode)
     jail = Column(Unicode, ForeignKey('jail.name'))
+    host = Column(Unicode)
+    path = Column(Unicode)
+    port = Column(Unicode)
 
 
 class PfRule(Model):

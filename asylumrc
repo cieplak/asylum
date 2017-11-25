@@ -10,6 +10,7 @@ path  = "/usr/local/jails"
 [base]
 uname = "11.1-RELEASE"
 url   = "ftp://ftp.freebsd.org/pub/FreeBSD/releases/amd64/amd64/11.1-RELEASE/base.txz"
+snapshot = "pool/jails/basejail@0.0.1"
 
 [db]
 path = "/root/.asylum.sqlite"

@@ -23,17 +23,21 @@ class Container(object):
         container.files = [File(**f) for f in config.files]
         container.packages = config.packages
         container.jail = Jail.create(container.name)
-        # container.jail.install_packages(container.packages)
-        # container.jail.install_services(*[container.service])
+        for file in container.files:
+            container.jail.install_file(file.src)
 
-    def enable(self):
-        self.jail.enable()
+        container.jail.install_packages(container.packages)
+        container.jail.install_service(container.service)
 
     def run(self):
-        self.jail.run()
+        self.jail.enable()
+        self.jail.start()
 
     def attach(self):
         self.jail.attach()
+
+    def command(self, args):
+        self.jail.exec(args)
 
 
 class Config(object):

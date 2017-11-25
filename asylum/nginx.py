@@ -1,24 +1,35 @@
+from asylum import config
+from asylum import sqlite
 from asylum.init import Rc
 from asylum.pkg import Pkg
 
 
 class Nginx(object):
 
-    @classmethod
-    def install(cls):
-        Pkg.install('nginx')
+    FILE = '/usr/local/etc/nginx/nginx.conf'
 
     @classmethod
-    def enable(cls):
-        Rc.enable('nginx')
+    def converge(cls):
+        services = sqlite.HttpService.query.all()
+        text = ConfigTemplate.render(*services)
+        with open(cls.FILE, 'w') as fd:
+            fd.write(text)
+        cls.reload()
+
 
     @classmethod
     def register_service(self, http_service):
-        pass
+        sqlite.HttpService.save(
+            jail=http_service.jail.name,
+            name=http_service.name,
+            host=http_service.host,
+            path=http_service.path,
+            port=http_service.port)
+        return http_service
 
     @classmethod
     def reload(self):
-        pass
+        Rc.reload('nginx')
 
 
 class ConfigTemplate(object):

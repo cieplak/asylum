@@ -1,7 +1,5 @@
 from enum import Enum, auto
 
-from asylum.init import Rc
-
 
 class Service(object):
 
@@ -18,8 +16,7 @@ class Service(object):
     def from_config(cls, config):
         return cls()
 
-    @classmethod
-    def install(cls, jail):
+    def install(self, jail):
         pass
 
 
@@ -33,6 +30,9 @@ class HttpService(Service):
         self.port = None
 
     def create(self):
+        pass
+
+    def install(self, jail):
         pass
 
 
