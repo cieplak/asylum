@@ -6,13 +6,10 @@ Container platform implemented with FreeBSD jails
 
 Install asylum on a FreeBSD host
 ```
-# TODO: pkg install asylum
 git clone https://github.com/cieplak/asylum.git
 cd asylum
-make
 su
-make install
-asylum init
+make
 ```
 
 ## Simple Usage
@@ -24,19 +21,21 @@ Example asylum file:
 ```toml
 # asylum.toml
 
-[service]
+[container]
 name     = "helloworld"
+version  = "0.0.1"
+packages = ["python36"]
+files    = [
+    {src = "files/foo"},
+    {src = "files/bar"}
+]
+
+[container.service]
 protocol = "http"
-path     = "/things"
+path     = "/greetings"
 port     = "8000"
 command  = "python3 -m http.server"
 
-packages = ["python36"]
-
-files = [
-  {src = files/foo},
-  {src = files/bar}
-]
 
 ```
 
@@ -100,16 +99,16 @@ command  = "/usr/local/bin/postgrest /usr/local/etc/schema3.conf"
 packages = ["postgresql10-server"]
 
 [[files]]
-src = files/schema1.conf
-dst = /usr/local/etc/schema1.conf
+src = "files/schema1.conf"
+dst = "/usr/local/etc/schema1.conf"
 
 [[files]]
-src = files/schema2.conf
-dst = /usr/local/etc/schema2.conf
+src = "files/schema2.conf"
+dst = "/usr/local/etc/schema2.conf"
 
 [[files]]
-src = files/schema3.conf
-dst = /usr/local/etc/schema3.conf
+src = "files/schema3.conf"
+dst = "/usr/local/etc/schema3.conf"
 
 bootstrap = [
   {csh = "fetch postgrest-v0.4.3.0-freebsd.tar.xz -o /tmp/postgrest.txz"},

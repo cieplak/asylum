@@ -1,0 +1,25 @@
+#!/usr/bin/env python3
+
+import click
+import colorful
+
+import asylum
+
+
+@click.group()
+def main():
+    pass
+
+
+@main.command(help='')
+def init():
+    asylum.System.bootstrap()
+
+
+@main.command(help='')
+def build():
+    asylum.Container.build()
+
+
+if __name__ == '__main__':
+    main()

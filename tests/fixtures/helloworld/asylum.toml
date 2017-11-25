@@ -1,0 +1,15 @@
+
+[container]
+name     = "helloworld"
+version  = "0.0.1"
+packages = ["python36"]
+files    = [
+    {src = "files/foo"},
+    {src = "files/bar"}
+]
+
+[container.service]
+protocol = "http"
+path     = "/greetings"
+port     = "8000"
+command  = "python3 -m http.server"
