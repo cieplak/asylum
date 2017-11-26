@@ -112,7 +112,7 @@ dst = "/usr/local/etc/schema3.conf"
 
 bootstrap = [
   {csh = "fetch postgrest-v0.4.3.0-freebsd.tar.xz -o /tmp/postgrest.txz"},
-  {csh = "tar -xvf /tmp/postgrest.txz"}
+  {csh = "tar -xvf /tmp/postgrest.txz"},
   {csh = "cp /tmp/postgrest /usr/local/bin/."}
 ]
 
