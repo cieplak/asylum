@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 import toml
@@ -16,7 +17,8 @@ jails = dict(
 base = dict(
     uname=None,
     url=None,
-    snapshot=None,
+    zpath=None,
+    version=None,
 )
 
 db = dict(
@@ -24,7 +26,7 @@ db = dict(
 )
 
 network = dict(
-    public_address=None,
+    public_ip=None,
     interface=None,
     cidr=None,
 )
@@ -32,7 +34,7 @@ network = dict(
 
 class AsylumConf(object):
 
-    PATH = '/root/asylumrc'
+    PATH = os.path.expanduser('~/.asylumrc')
 
     KEYS = [
         'zpool'
@@ -43,11 +45,15 @@ class AsylumConf(object):
         Path(cls.PATH).touch()
 
     @classmethod
-    def load(cls, path=PATH):
+    def load(cls, path=None):
+        if not path:
+            path = cls.PATH
         global zpool, jails, base, db, network
         settings = toml.load(path)
         zpool = settings.get('zpool')
         jails = settings.get('jails')
         base = settings.get('base')
         db = settings.get('db')
+        db['path'] = os.path.expanduser(db['path'])
+
         network = settings.get('network')

@@ -1,6 +1,7 @@
 import os
 
 import toml
+from asylum import config as cfg
 from asylum.jail import Jail
 from asylum.service import Service
 
@@ -15,6 +16,7 @@ class Container(object):
 
     @classmethod
     def build(cls, config_directory=os.getcwd()):
+        cfg.AsylumConf.load()
         container = Container()
         config = Config.parse(config_directory)
         container.name = config.name
@@ -22,7 +24,7 @@ class Container(object):
         container.service = Service.from_config(config.service)
         container.files = [File(**f) for f in config.files]
         container.packages = config.packages
-        container.jail = Jail.create(container.name)
+        container.jail = Jail.new(container.name)
         for file in container.files:
             container.jail.install_file(file.src)
 

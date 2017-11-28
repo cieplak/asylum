@@ -16,7 +16,6 @@ class Nginx(object):
             fd.write(text)
         cls.reload()
 
-
     @classmethod
     def register_service(self, http_service):
         sqlite.HttpService.save(

@@ -1,37 +1,37 @@
 import os
-import subprocess
 
 from asylum import sqlite
+from asylum.console import Console
 
 
-class Rc(object):
+class Rc(Console):
 
     PATH = '/etc/rc.conf'
 
     @classmethod
     def enable(cls, name):
-        cmd = ['service', name, 'enable']
-        return subprocess.run(cmd)
+        cmd = ' '.join(['service', name, 'enable'])
+        return cls.run(cmd)
 
     @classmethod
     def start(cls, name):
-        cmd = ['service', name, 'start']
-        return subprocess.run(cmd)
+        cmd = ' '.join(['service', name, 'start'])
+        return cls.run(cmd)
 
     @classmethod
     def stop(cls, name):
-        cmd = ['service', name, 'stop']
-        return subprocess.run(cmd)
+        cmd = ' '.join(['service', name, 'stop'])
+        return cls.run(cmd)
 
     @classmethod
     def restart(cls, name):
-        cmd = ['service', name, 'restart']
-        return subprocess.run(cmd)
+        cmd = ' '.join(['service', name, 'restart'])
+        return cls.run(cmd)
 
     @classmethod
     def reload(cls, name):
-        cmd = ['service', name, 'reload']
-        return subprocess.run(cmd)
+        cmd = ' '.join(['service', name, 'reload'])
+        return cls.run(cmd)
 
     @classmethod
     def bootstrap(cls):
@@ -44,7 +44,11 @@ class Rc(object):
     @classmethod
     def set(cls, value):
         sqlite.Session.add(sqlite.RcSetting(value=value))
-        sqlite.Session.commit()
+        try:
+            sqlite.Session.commit()
+        except Exception as exc:
+            Console.show_warn('/etc/rc.conf already has ' + value)
+            sqlite.Session.rollback()
 
     @classmethod
     def converge(cls):

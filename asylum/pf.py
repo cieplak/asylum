@@ -10,7 +10,7 @@ class Pf(object):
     def converge(cls):
         text = ConfigTemplate.render(
             jail_iface=config.network['interface'],
-            public_ip=config.network['public_address'])
+            public_ip=config.network['public_ip'])
         with open(cls.FILE, 'w') as fd:
             fd.write(text)
         Rc.reload('pf')
@@ -30,5 +30,5 @@ nat pass on {$JAIL_IFACE} from $JAIL_CIDR to any -> $PUBLIC_IP
     def render(cls, jail_iface, public_ip, jail_cidr='10.0.0.0/24'):
         return (cls.TEMPLATE
                 .replace('{$PUBLIC_IP}', public_ip)
-                .replace('{JAIL_IFACE}', jail_iface)
+                .replace('{$JAIL_IFACE}', jail_iface)
                 .replace('{$JAIL_CIDR}', jail_cidr))

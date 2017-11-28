@@ -1,0 +1,22 @@
+
+[zpool]
+name   = "pool"
+device = "/dev/nvd0"
+
+[jails]
+zpool = "pool/jails"
+path  = "/usr/local/jails"
+
+[base]
+uname   = "11.1-RELEASE"
+url     = "ftp://ftp.freebsd.org/pub/FreeBSD/releases/amd64/amd64/11.1-RELEASE/base.txz"
+zpath   = "pool/jails/base"
+version = "0.0.1"
+
+[db]
+path = "~/.asylum.sqlite"
+
+[network]
+interface = "ena0"
+public_ip = ""
+cidr      = "10.0.0.*"

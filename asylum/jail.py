@@ -1,14 +1,14 @@
 from enum import Enum, auto
 import os
-import subprocess
 
 from asylum import config
 from asylum import sqlite
+from asylum.console import Console
 from asylum.hosts import Hosts
 from asylum.zfs import Zfs
 
 
-class Jail(object):
+class Jail(Console):
 
     class State(Enum):
         stopped = auto()
@@ -30,7 +30,7 @@ class Jail(object):
         jail = Jail()
         zpool = config.jails['zpool']
         path = os.path.join(config.jails['path'], name)
-        base_snapshot = config.base['snapshot']
+        base_snapshot = '{}@{}'.format(config.base['zpath'], config.base['version'])
         interface = config.network['interface']
         Zfs.clone(base_snapshot, '{}/{}'.format(zpool, name))
         record = sqlite.Jail.save(
@@ -40,25 +40,26 @@ class Jail(object):
             interface=interface,
         )
         cidr = config.network['cidr']
-        record.address = cidr.replace('*', record.id)
-        record.session.commit()
+        record.address = cidr.replace('*', str(record.id))
+        record.Session.commit()
+
         return jail
 
     def enable(self):
         cmd = ['service', 'jail', 'enable', self.name]
-        return subprocess.run(cmd)
+        return self.run(cmd)
 
     def start(self):
         cmd = ['service', 'jail', 'start', self.name]
-        return subprocess.run(cmd)
+        return self.run(cmd)
 
     def stop(self):
         cmd = ['service', 'jail', 'stop', self.name]
-        return subprocess.run(cmd)
+        return self.run(cmd)
 
     def install_file(self, src, dst=None):
         cmd = ['cp', src, self.user.home]
-        return subprocess.run(cmd)
+        return self.run(cmd)
 
     def install_package(self, *pkgs):
         pass
@@ -79,10 +80,10 @@ class User(object):
 
     def create(self, name, shell='/bin/csh'):
         home = '/home/{}'.format(name)
-        subprocess.run(['mdkir', home])
+        self.run(['mdkir', home])
         cmd = ['pw', 'useradd', '-n', name, '-s', shell, '-w', 'no', '-d', home]
-        subprocess.run(cmd)
-        subprocess.run(['chown', '-R', '{user}:{user}'.format(user=name), home])
+        self.run(cmd)
+        self.run(['chown', '-R', '{user}:{user}'.format(user=name), home])
 
 
 class File(object):

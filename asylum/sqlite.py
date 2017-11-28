@@ -21,6 +21,13 @@ Session = None
 Metadata = _MetaData()
 
 
+def create_new_database():
+    from asylum import config
+    config.AsylumConf.load()
+    init(config.db['path'])
+    Model.metadata.create_all(engine)
+
+
 class ModelMixin(object):
 
     def __repr__(self):

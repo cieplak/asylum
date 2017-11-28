@@ -1,9 +1,9 @@
-import subprocess
+from asylum.console import Console
 
 
-class Pkg(object):
+class Pkg(Console):
 
     @classmethod
     def install(cls, pkg_name):
-        cmd = ['pkg', 'install', '-y', pkg_name]
-        return subprocess.run(cmd)
+        cmd = ' '.join(['pkg', 'install', '-y', pkg_name])
+        return cls.run(cmd)
