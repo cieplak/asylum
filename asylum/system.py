@@ -36,7 +36,7 @@ class System(Console):
 
     def create_jail_directory(self):
         path = config.jails['path']
-        pool = config.zpool['name']
+        pool = config.zpool['zpath']
         dev = config.zpool['device']
         Zfs.create_pool(dev, pool)
         jail_pool = config.jails['zpool']

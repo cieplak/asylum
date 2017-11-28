@@ -5,12 +5,12 @@ import toml
 
 
 zpool = dict(
-    name=None,
+    zpath=None,
     device=None,
 )
 
 jails = dict(
-    zpool=None,
+    zpath=None,
     path=None,
 )
 

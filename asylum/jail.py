@@ -28,7 +28,7 @@ class Jail(Console):
     @classmethod
     def new(cls, name):
         jail = Jail()
-        zpool = config.jails['zpool']
+        zpool = config.jails['zpath']
         path = os.path.join(config.jails['path'], name)
         base_snapshot = '{}@{}'.format(config.base['zpath'], config.base['version'])
         interface = config.network['interface']

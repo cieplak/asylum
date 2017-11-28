@@ -1,10 +1,10 @@
 
 [zpool]
-name   = "pool"
+zpath   = "pool"
 device = "/dev/nvd0"
 
 [jails]
-zpool = "pool/jails"
+zpath = "pool/jails"
 path  = "/usr/local/jails"
 
 [base]
